@@ -7,8 +7,11 @@ import com.carlos.ecom.dto.UserRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Slf4j
 @Service
@@ -52,5 +55,31 @@ public class UserServiceImpl {
         }
         return userRes;
     }
+
+    public UserRes login(UserRes loginRes){
+        UserRes response = new UserRes();
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRes.getEmail(), loginRes.getPassword()));
+
+            var user = userDao.findByEmail(loginRes.getEmail()).orElseThrow();
+            var jwt = jwtUtils.generateSecretToken(user);
+            var refreshtoken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+
+            response.setStatusCode(200);
+            response.setToken(jwt);
+            response.setRole(user.getRole());
+            response.setRefreshToken(refreshtoken);
+            response.setExpirationTime("24Hrs");
+            response.setMessage("Inicio de sesion Exitosa");
+
+        }catch (RuntimeException e){
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
+
 
 }

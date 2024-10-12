@@ -11,4 +11,8 @@ public interface UserControllerRest {
 
     @PostMapping("/auth/singUp")
     public ResponseEntity<UserRes> singUp(@RequestBody UserRes reg);
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<UserRes> login(@RequestBody UserRes reg);
+
 }

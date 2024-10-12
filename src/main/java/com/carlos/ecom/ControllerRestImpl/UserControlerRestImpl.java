@@ -1,6 +1,7 @@
 package com.carlos.ecom.ControllerRestImpl;
 
 import com.carlos.ecom.ControllerRest.UserControllerRest;
+import com.carlos.ecom.Entity.User;
 import com.carlos.ecom.dto.UserRes;
 import com.carlos.ecom.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,10 @@ public class UserControlerRestImpl implements UserControllerRest {
     @Override
     public ResponseEntity<UserRes> singUp(@RequestBody UserRes reg){
         return ResponseEntity.ok(userServiceImpl.singUp(reg));
+    }
+
+    @Override
+    public ResponseEntity<UserRes> login(@RequestBody UserRes reg){
+        return  ResponseEntity.ok(userServiceImpl.login(reg));
     }
 }

@@ -1,10 +1,6 @@
 package com.carlos.ecom.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

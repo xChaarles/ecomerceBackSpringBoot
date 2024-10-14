@@ -22,10 +22,7 @@ public class Producto {
     private String pdescripcion;
 
     @Column(nullable = false, name = "precio")
-    private String precio;
-
-    @Column(nullable = false, name = "nombre")
-    private String nombre;
+    private Integer precio;
 
     @Column(nullable = false, name = "cantidad")
     private Long cantidad;

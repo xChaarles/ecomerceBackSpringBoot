@@ -101,7 +101,7 @@ public class CategoriaProdcutoServiceImpl {
                 categoriaProductoRes.setMessage("Categoria Eliminada Con exito");
             }else {
                 categoriaProductoRes.setStatusCode(404);
-                categoriaProductoRes.setMessage("Categoria no encontrada para actualizacion");
+                categoriaProductoRes.setMessage("Categoria no encontrada");
             }
         }catch (Exception e){
             categoriaProductoRes.setStatusCode(500);

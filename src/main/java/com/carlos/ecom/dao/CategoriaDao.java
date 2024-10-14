@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface CategoriaDao extends JpaRepository<CategoriaProducto, Integer> {
-
+    Optional<CategoriaProducto> findByCnombre(String cnombre);
 }

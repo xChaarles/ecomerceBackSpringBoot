@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -69,6 +70,7 @@ public class UserServiceImpl {
             response.setStatusCode(200);
             response.setToken(jwt);
             response.setRole(user.getRole());
+            response.setImg_url(user.getImg_url());
             response.setRefreshToken(refreshtoken);
             response.setExpirationTime("24Hrs");
             response.setMessage("Inicio de sesion Exitosa");
@@ -78,6 +80,40 @@ public class UserServiceImpl {
             response.setMessage(e.getMessage());
         }
         return response;
+    }
+
+    public UserRes getAllUser (){
+        UserRes userRes = new UserRes();
+        try {
+            List<User> result = userDao.findAll();
+            if (!result.isEmpty()){
+                userRes.setUserList(result);
+                userRes.setStatusCode(200);
+                userRes.setMessage("Exitosa");
+            } else {
+                userRes.setStatusCode(404);
+                userRes.setMessage("No se econtro ningun Producto");
+            }
+            return userRes;
+        }catch (Exception e){
+            userRes.setStatusCode(500);
+            userRes.setMessage("Ocurrio un ERROR:"+ e.getMessage());
+            return userRes;
+        }
+    }
+
+    public UserRes getUserById(Integer Id){
+        UserRes userRes = new UserRes();
+        try{
+            User userById = userDao.findById(Id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            userRes.setUser(userById);
+            userRes.setStatusCode(200);
+            userRes.setMessage("Usuario con id '"  + Id + "' encontrada Exitosamente");
+        }catch (Exception e){
+            userRes.setStatusCode(500);
+            userRes.setMessage("Ocurrio un ERROR"+ e.getMessage());
+        }
+        return userRes;
     }
 
 

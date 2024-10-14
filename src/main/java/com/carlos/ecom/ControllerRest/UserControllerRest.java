@@ -2,9 +2,7 @@ package com.carlos.ecom.ControllerRest;
 
 import com.carlos.ecom.dto.UserRes;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping
 public interface UserControllerRest {
@@ -14,5 +12,11 @@ public interface UserControllerRest {
 
     @PostMapping("/auth/login")
     public ResponseEntity<UserRes> login(@RequestBody UserRes reg);
+
+    @GetMapping("/admin/all-user")
+    public ResponseEntity<UserRes> getAllUser();
+
+    @GetMapping("/admin/user/{Id}")
+    public ResponseEntity<UserRes> getUserById(@PathVariable Integer Id);
 
 }

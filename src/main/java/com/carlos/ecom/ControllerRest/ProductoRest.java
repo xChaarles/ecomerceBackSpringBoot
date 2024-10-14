@@ -26,7 +26,7 @@ public interface ProductoRest {
     @DeleteMapping("/admin/delete-producto/{productoId}")
     public ResponseEntity<ProductoRes> deleteProducto(@PathVariable Integer productoId);
 
-    @GetMapping("public/categoria/{Cnombre}")
-    public ResponseEntity<ProductoRes> obtenerProductoPorNombreCategoria(@PathVariable String Cnombre);
+    @GetMapping("public/categoria/{categoriaNombre}")
+    public List<Producto> obtenerProductoPorNombreCategoria(@PathVariable String categoriaNombre);
 
 }

@@ -138,24 +138,8 @@ public class ProdcutoServiceImpl {
         return productoRes;
     }
 
-    public ProductoRes obtenerProductoPorNombreCategoria(String Cnombre){
-        ProductoRes productoRes = new ProductoRes();
-        try{
-            List<Producto> result = productoDao.findByCategoriaCnombre(Cnombre);
-            if (!result.isEmpty()){
-                productoRes.setProductoList(result);
-                productoRes.setStatusCode(200);
-                productoRes.setMessage("Exitoso");
-            }else {
-                productoRes.setStatusCode(404);
-                productoRes.setMessage("No se econtro ningun Producto");
-            }
-            return productoRes;
-        }catch (Exception e){
-            productoRes.setStatusCode(500);
-            productoRes.setMessage("Ocurrio un ERROR:"+ e.getMessage());
-            return productoRes;
-        }
+    public List<Producto> obtenerProductoPorNombreCategoria(String categoriaNombre){
+       return productoDao.findByCategoriaCnombre(categoriaNombre);
     }
 
 }

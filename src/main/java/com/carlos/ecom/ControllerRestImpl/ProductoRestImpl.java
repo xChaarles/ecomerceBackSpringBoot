@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class ProductoRestImpl implements ProductoRest {
 
@@ -43,8 +45,8 @@ public class ProductoRestImpl implements ProductoRest {
     }
 
     @Override
-    public ResponseEntity<ProductoRes> obtenerProductoPorNombreCategoria(@PathVariable String Cnombre){
-        return ResponseEntity.ok(prodcutoServiceImpl.obtenerProductoPorNombreCategoria(Cnombre));
+    public List<Producto> obtenerProductoPorNombreCategoria(@PathVariable String categoriaNombre){
+        return prodcutoServiceImpl.obtenerProductoPorNombreCategoria(categoriaNombre);
     }
 
 }

@@ -35,4 +35,14 @@ public class UserControlerRestImpl implements UserControllerRest {
     public ResponseEntity<UserRes> getUserById(@PathVariable Integer Id){
         return ResponseEntity.ok(userServiceImpl.getUserById(Id));
     }
+
+    @Override
+    public ResponseEntity<UserRes> updateUser(@PathVariable Integer userId, @RequestBody User reg){
+        return ResponseEntity.ok(userServiceImpl.updateUser(userId, reg));
+    }
+
+    @Override
+    public ResponseEntity<UserRes> deleteUser(@PathVariable Integer userId){
+        return ResponseEntity.ok(userServiceImpl.deleteUser(userId));
+    }
 }

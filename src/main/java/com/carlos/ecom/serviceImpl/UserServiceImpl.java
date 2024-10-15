@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -116,6 +117,56 @@ public class UserServiceImpl {
         return userRes;
     }
 
+    public UserRes updateUser(Integer userId, User updateUser) {
+        UserRes userRes = new UserRes();
+        try {
+            Optional<User> userOptional = userDao.findById(userId);
+            if(userOptional.isPresent()){
+                User userExiste = userOptional.get();
+                userExiste.setNombre(updateUser.getNombre());
+                userExiste.setApellido(updateUser.getApellido());
+                userExiste.setEmail(updateUser.getEmail());
+                userExiste.setImg_url(updateUser.getImg_url());
+                userExiste.setCiudad(updateUser.getCiudad());
+                userExiste.setNumeroContacto(updateUser.getNumeroContacto());
+                userExiste.setRole(updateUser.getRole());
 
+                if(updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()){
+                    userExiste.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+                }
+
+                User saveUser = userDao.save(userExiste);
+                userRes.setUser(saveUser);
+                userRes.setStatusCode(200);
+                userRes.setMessage("Usuario actualizado Exitosamente");
+            }else {
+                userRes.setStatusCode(500);
+                userRes.setMessage("Usuario no encontrado");
+            }
+        }catch (Exception e){
+            userRes.setStatusCode(500);
+            userRes.setMessage("Ocurrio un ERROR " + e.getMessage());
+        }
+        return userRes;
+    }
+
+    public UserRes deleteUser (Integer userId){
+        UserRes userRes = new UserRes();
+        try{
+            Optional<User> userOptional = userDao.findById(userId);
+            if(userOptional.isPresent()){
+                userDao.deleteById(userId);
+                userRes.setStatusCode(200);
+                userRes.setMessage("Usuario Eliminado Exitosamente");
+            }else {
+                userRes.setStatusCode(404);
+                userRes.setMessage("Usuario no Encontrado");
+            }
+        }catch (Exception e){
+            userRes.setStatusCode(500);
+            userRes.setMessage("Usuario no Encontrado" + e.getMessage());
+        }
+        return userRes;
+    }
 
 }

@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdcutoServiceImpl {
@@ -22,22 +24,40 @@ public class ProdcutoServiceImpl {
     @Autowired
     private ProductoDao productoDao;
 
-    public ProductoRes getAllProdcuto(){
+    public ProductoRes getAllProducto() {
         ProductoRes productoRes = new ProductoRes();
-        try{
-            List<Producto> result = productoDao.findAll();
-            if (!result.isEmpty()){
-                productoRes.setProductoList(result);
+        List<Producto> result;
+
+        try {
+            result = productoDao.findAll(); // Obtiene la lista de productos
+            if (!result.isEmpty()) {
+                List<ProductoRes> productosConCategoria = new ArrayList<>();
+
+                for (Producto producto : result) {
+                    ProductoRes productoItem = new ProductoRes();
+                    productoItem.setId(producto.getId());
+                    productoItem.setPimgUrl(producto.getPimgUrl());
+                    productoItem.setPnombre(producto.getPnombre());
+                    productoItem.setPdescripcion(producto.getPdescripcion());
+                    productoItem.setPrecio(producto.getPrecio());
+                    productoItem.setCantidad(producto.getCantidad());
+                    productoItem.setCategoria(producto.getCategoria() != null ? producto.getCategoria().getCnombre() : "");
+                    productosConCategoria.add(productoItem);
+                }
+                productoRes.setProductoList(productosConCategoria);
                 productoRes.setStatusCode(200);
                 productoRes.setMessage("Exitoso");
-            }else {
+            } else {
                 productoRes.setStatusCode(404);
-                productoRes.setMessage("No se econtro ningun Producto");
+                productoRes.setMessage("No se encontró ningún Producto");
             }
             return productoRes;
-        }catch (Exception e){
+        } catch (Exception e) {
             productoRes.setStatusCode(500);
-            productoRes.setMessage("Ocurrio un ERROR:"+ e.getMessage());
+            productoRes.setMessage("Ocurrió un ERROR: " + e.getMessage());
+            // Añadir log aquí para obtener más detalles
+            System.err.println("Error en getAllProducto: " + e.getMessage());
+            e.printStackTrace(); // Esto ayuda a depurar la excepción
             return productoRes;
         }
     }

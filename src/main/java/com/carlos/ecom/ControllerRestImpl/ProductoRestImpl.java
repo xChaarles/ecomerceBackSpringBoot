@@ -20,8 +20,9 @@ public class ProductoRestImpl implements ProductoRest {
     ProdcutoServiceImpl prodcutoServiceImpl;
 
     @Override
-    public ResponseEntity<ProductoRes> getAllProducto(){
-        return ResponseEntity.ok(prodcutoServiceImpl.getAllProdcuto());
+    public ResponseEntity<ProductoRes> getAllProducto() {
+        ProductoRes productoRes = prodcutoServiceImpl.getAllProducto();
+        return ResponseEntity.status(productoRes.getStatusCode()).body(productoRes);
     }
 
     @Override

@@ -11,6 +11,7 @@ public class ProductoRes {
     private int statusCode;
     private String error;
     private String message;
+    private Integer id;
     private String pimgUrl;
     private String pnombre;
     private String pdescripcion;
@@ -18,6 +19,6 @@ public class ProductoRes {
     private Long cantidad;
     private String categoria;
     private Producto producto;
-    private List<Producto> productoList;
+    private List<ProductoRes> productoList;
 
 }

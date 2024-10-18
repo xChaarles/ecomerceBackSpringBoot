@@ -35,13 +35,13 @@ public class CategoriaProdcutoServiceImpl {
         }
     }
 
-    public CategoriaProductoRes getCategoriaProdcutoById (Integer Cid){
+    public CategoriaProductoRes getCategoriaProdcutoById (Integer id){
         CategoriaProductoRes categoriaProductoRes = new CategoriaProductoRes();
         try{
-            CategoriaProducto categoriaProductoById = categoriaDao.findById(Cid).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+            CategoriaProducto categoriaProductoById = categoriaDao.findById(id).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
             categoriaProductoRes.setCategoriaProducto(categoriaProductoById);
             categoriaProductoRes.setStatusCode(200);
-            categoriaProductoRes.setMessage("Categoria con id '"  + Cid + "' encontrada Exitosamente");
+            categoriaProductoRes.setMessage("Categoria con id '"  + id + "' encontrada Exitosamente");
         }catch (Exception e){
             categoriaProductoRes.setStatusCode(500);
             categoriaProductoRes.setMessage("Ocurrio un ERROR"+ e.getMessage());

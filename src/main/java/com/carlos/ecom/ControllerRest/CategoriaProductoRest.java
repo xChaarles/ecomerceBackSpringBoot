@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 public interface CategoriaProductoRest {
 
 
-    @GetMapping("/public/get-all-categoria")
+    @GetMapping("/public/all-categoria")
     public ResponseEntity<CategoriaProductoRes> getAllCategoria();
 
-    @GetMapping("/public/categoria/{id}")
+    @GetMapping("/public/categoriaProducto/{id}")
     public ResponseEntity<CategoriaProductoRes> getCategoriaProdcutoById(@PathVariable Integer id);
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")

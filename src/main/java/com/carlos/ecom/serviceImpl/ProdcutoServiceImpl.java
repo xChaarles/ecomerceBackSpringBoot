@@ -62,13 +62,13 @@ public class ProdcutoServiceImpl {
         }
     }
 
-    public ProductoRes getProductoById(Integer Pid){
+    public ProductoRes getProductoById(Integer id){
         ProductoRes productoRes = new ProductoRes();
         try {
-            Producto productoById = productoDao.findById(Pid).orElseThrow(() -> new RuntimeException("Prodcuto no encontrado"));
+            Producto productoById = productoDao.findById(id).orElseThrow(() -> new RuntimeException("Prodcuto no encontrado"));
             productoRes.setProducto(productoById);
             productoRes.setStatusCode(200);
-            productoRes.setMessage("Producto con id '"  + Pid + "' encontrada Exitosamente");
+            productoRes.setMessage("Producto con id '"  + id + "' encontrada Exitosamente");
         }catch (Exception e){
             productoRes.setStatusCode(500);
             productoRes.setMessage("Ocurrio un ERROR"+ e.getMessage());

@@ -14,8 +14,8 @@ public interface ProductoRest {
     @GetMapping("/public/all-producto")
     public ResponseEntity<ProductoRes> getAllProducto();
 
-    @GetMapping("/public/producto/{Pid}")
-    public ResponseEntity<ProductoRes> getProductoById(@PathVariable Integer Pid);
+    @GetMapping("/public/producto/{id}")
+    public ResponseEntity<ProductoRes> getProductoById(@PathVariable Integer id);
 
     @PostMapping("/admin/create-producto")
     public ResponseEntity<ProductoRes> createProducto(@RequestBody ProductoRes reg);

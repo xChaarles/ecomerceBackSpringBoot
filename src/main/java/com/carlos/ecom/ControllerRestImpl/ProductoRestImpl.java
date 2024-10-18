@@ -26,8 +26,8 @@ public class ProductoRestImpl implements ProductoRest {
     }
 
     @Override
-    public ResponseEntity<ProductoRes> getProductoById(@PathVariable Integer Pid){
-        return ResponseEntity.ok(prodcutoServiceImpl.getProductoById(Pid));
+    public ResponseEntity<ProductoRes> getProductoById(@PathVariable Integer id){
+        return ResponseEntity.ok(prodcutoServiceImpl.getProductoById(id));
     }
 
     @Override

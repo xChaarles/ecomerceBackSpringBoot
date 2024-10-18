@@ -30,4 +30,8 @@ public class Producto {
     @ManyToOne
     @JoinColumn(nullable = false, name = "categoria_id")
     private CategoriaProducto categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "detalle_orden_id")
+    private DetalleOrden detalleOrden;
 }

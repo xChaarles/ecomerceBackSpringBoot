@@ -42,9 +42,6 @@ public class User implements UserDetails {
     @Column(nullable = false, name = "role")
     private String role;
 
-    @OneToMany(mappedBy = "user")
-    private List<Venta> ventas;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));

@@ -22,7 +22,7 @@ public class DetalleVenta {
     @OneToOne
     private Venta venta;
 
-    @OneToOne
+    @ManyToOne
     private Producto producto;
 
 }

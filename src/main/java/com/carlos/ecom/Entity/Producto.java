@@ -28,10 +28,7 @@ public class Producto {
     private Long cantidad;
 
     @ManyToOne
-    @JoinColumn(nullable = false, name = "categoria_id")
+    @JoinColumn(name = "categoria_id")
     private CategoriaProducto categoria;
 
-    @ManyToOne
-    @JoinColumn(name = "detalle_orden_id")
-    private DetalleOrden detalleOrden;
 }

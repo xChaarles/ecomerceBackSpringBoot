@@ -1,5 +1,6 @@
 package com.carlos.ecom.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,6 +42,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false, name = "role")
     private String role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Orden> ordenes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

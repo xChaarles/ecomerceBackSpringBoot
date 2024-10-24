@@ -72,6 +72,7 @@ public class UserServiceImpl {
             response.setToken(jwt);
             response.setRole(user.getRole());
             response.setImg_url(user.getImg_url());
+            response.setId(user.getId());
             response.setRefreshToken(refreshtoken);
             response.setExpirationTime("24Hrs");
             response.setMessage("Inicio de sesion Exitosa");

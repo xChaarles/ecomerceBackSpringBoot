@@ -3,8 +3,6 @@ package com.carlos.ecom.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Entity
 @Table(name = "detalle_orden")
@@ -14,13 +12,28 @@ public class DetalleOrden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, name = "nombre")
+    @Column(name = "nombre")
     private String nombre;
 
-    @OneToOne
-    @JoinColumn(name = "orden_id", nullable = false)
-    private Orden orden;  // Relación 1 a 1 con Orden
+    @Column(name = "imgp")
+    private String imgp;
 
-    @OneToMany(mappedBy = "detalleOrden", cascade = CascadeType.ALL)
-    private List<Producto> productos;  // Relación 1 a muchos con Producto
+    @Column(name = "cantidad")
+    private Long cantidad;
+
+    @Column(name = "precio")
+    private Integer precio;
+
+    @Column(name = "total")
+    private double total;
+
+    @ManyToOne
+    @JoinColumn(name = "carrito_id")
+    private Carrito carrito;
+
+    @ManyToOne
+    private Orden orden;
+
+    @OneToOne
+    private Producto producto;
 }

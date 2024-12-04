@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,6 +40,11 @@ public class OrdenRestImpl implements OrdenRest {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al validar la transacción: " + e.getMessage());
         }
+    }
+
+    @Override
+    public ResponseEntity<List<OrdenRes>> getOrdenByUsers(@PathVariable Integer userId){
+        return  ResponseEntity.ok(ordenServideImpl.getOrdenByUsers(userId));
     }
 
 }

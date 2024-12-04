@@ -72,6 +72,11 @@ public class UserServiceImpl {
             response.setToken(jwt);
             response.setRole(user.getRole());
             response.setImg_url(user.getImg_url());
+            response.setNombre(user.getNombre());
+            response.setApellido(user.getApellido());
+            response.setEmail(user.getEmail());
+            response.setNumeroContacto(user.getNumeroContacto());
+            response.setCiudad(user.getCiudad());
             response.setId(user.getId());
             response.setRefreshToken(refreshtoken);
             response.setExpirationTime("24Hrs");

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrdenDao extends JpaRepository<Orden, Integer> {
-    Optional<Orden> findByUser(User user);
+    List<Orden> findByUserId(Integer userId);
     Optional<Orden> deleteByNumeroOrden(String numeroOrden);
     Optional<Orden> findByNumeroOrden(String numeroOrden);
 }

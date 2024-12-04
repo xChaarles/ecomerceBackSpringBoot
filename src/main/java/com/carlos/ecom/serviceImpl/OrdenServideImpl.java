@@ -16,10 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OrdenServideImpl {
@@ -171,5 +168,34 @@ public class OrdenServideImpl {
     @Transactional
     public void eliminarOrdenPorNumero(String numeroOrden) {
         ordenDao.deleteByNumeroOrden(numeroOrden);
+    }
+
+    public List<OrdenRes> getOrdenByUsers(Integer userId){
+        List<OrdenRes> ordenList = new ArrayList<>();
+        try{
+            List<Orden> ordenes = ordenDao.findByUserId(userId);
+            if (!ordenes.isEmpty()) {
+                for (Orden orden : ordenes) {
+                    OrdenRes ordenRes = new OrdenRes();
+                    ordenRes.setStatusCode(200);
+                    ordenRes.setMessage("Órden encontrada.");
+                    ordenRes.setNumeroOrden(orden.getNumeroOrden());
+                    ordenRes.setFechaCreacion(orden.getFechaCreacion());
+                    // Agregar más detalles si es necesario.
+                    ordenList.add(ordenRes);
+                }
+            } else {
+                OrdenRes ordenRes = new OrdenRes();
+                ordenRes.setStatusCode(404);
+                ordenRes.setMessage("No tienes órdenes aún.");
+                ordenList.add(ordenRes);
+            }
+        }catch (Exception e){
+            OrdenRes errorRes = new OrdenRes();
+            errorRes.setStatusCode(500);
+            errorRes.setMessage("Ocurrió un error: " + e.getMessage());
+            ordenList.add(errorRes);
+        }
+        return ordenList;
     }
 }

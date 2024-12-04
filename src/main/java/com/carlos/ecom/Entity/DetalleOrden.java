@@ -32,6 +32,7 @@ public class DetalleOrden {
     private Carrito carrito;
 
     @ManyToOne
+    @JoinColumn(name = "orden_id")
     private Orden orden;
 
     @OneToOne

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,15 +21,14 @@ public class Orden {
 
     @Column(name = "numero_orden", unique = true)
     private String numeroOrden;
-
-    private Date fechaCreacion;
-
-    private Date fechaRecibido;
+    private String estado;
+    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechaRecibido;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleOrden> detalleOrdens;
 }

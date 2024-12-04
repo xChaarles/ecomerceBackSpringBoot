@@ -10,7 +10,9 @@ import com.carlos.ecom.dao.ProductoDao;
 import com.carlos.ecom.dao.UserDao;
 import com.carlos.ecom.dto.CarritoRequest;
 import com.carlos.ecom.dto.DetalleOrdenRes;
+import com.carlos.ecom.dto.OrdenRes;
 import com.carlos.ecom.dto.UserCarrito;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -161,6 +163,8 @@ public class CarritoServiceImpl {
                 userRes.setNombre(carrito.getUser().getNombre());
                 userRes.setApellido(carrito.getUser().getApellido());
                 userRes.setImg_url(carrito.getUser().getImg_url());
+                userRes.setEmail(carrito.getUser().getEmail());
+                userRes.setNumeroContacto(carrito.getUser().getNumeroContacto());
                 carritoRequest.setUserDTO(userRes);
 
                 // Crear y asignar los detalles de la orden a la respuesta
@@ -193,7 +197,6 @@ public class CarritoServiceImpl {
             carritoRequest.setStatusCode(500);
             carritoRequest.setMessage("Ocurrió un error: " + e.getMessage());
         }
-
         return carritoRequest;
     }
 
@@ -240,5 +243,44 @@ public class CarritoServiceImpl {
         }
         return carritoRequest;
     }
+
+    @Transactional
+    public OrdenRes confirmarCarrito(Integer userId) {
+        OrdenRes ordenRes = new OrdenRes();
+        try {
+            Optional<Carrito> carritoOpt = carritoDao.findByUserId(userId);
+            if (carritoOpt.isPresent()) {
+                Carrito carrito = carritoOpt.get();
+
+                // Actualizar el stock de los productos
+                for (DetalleOrden detalles : carrito.getDetalles()) {
+                    Producto producto = productoDao.findById(detalles.getProducto().getId())
+                            .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+                    if (producto.getCantidad() < detalles.getCantidad()) {
+                        throw new RuntimeException("Stock insuficiente para el producto: " + producto.getPnombre());
+                    }
+
+                    // Reducir el stock
+                    producto.setCantidad(producto.getCantidad() - detalles.getCantidad());
+                    productoDao.save(producto);
+                }
+
+                carrito.getDetalles().clear();
+                carritoDao.save(carrito);
+
+                ordenRes.setStatusCode(200);
+                ordenRes.setMessage("Compra confirmada, productos actualizados y carrito eliminado");
+            } else {
+                ordenRes.setStatusCode(404);
+                ordenRes.setMessage("Carrito no encontrado");
+            }
+        } catch (Exception e) {
+            ordenRes.setStatusCode(500);
+            ordenRes.setMessage("Error al confirmar la compra: " + e.getMessage());
+        }
+        return ordenRes;
+    }
+
 
 }

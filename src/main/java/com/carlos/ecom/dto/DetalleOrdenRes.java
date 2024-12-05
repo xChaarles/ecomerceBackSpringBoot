@@ -20,8 +20,9 @@ public class DetalleOrdenRes {
     private Long cantidad;
     private Integer precio;
     private double total;
-    private String Ordenid;
+    private String ordenId;
     private ProductoRes productoRes;
     private double totalAcumulado;
+    private List<DetalleOrdenRes> detalles;
 
 }

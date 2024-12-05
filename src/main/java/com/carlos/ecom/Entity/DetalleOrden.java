@@ -35,6 +35,6 @@ public class DetalleOrden {
     @JoinColumn(name = "orden_id")
     private Orden orden;
 
-    @OneToOne
+    @ManyToOne
     private Producto producto;
 }

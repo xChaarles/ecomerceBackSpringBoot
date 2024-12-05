@@ -62,6 +62,23 @@ public class OrdenServideImpl {
             orden.setFechaCreacion(LocalDateTime.now());
             orden.setUser(user);
             orden.setEstado("PENDIENTE");
+
+            Carrito carrito = carritoDao.findByUserId(userId)
+                    .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+
+            List<DetalleOrden> detallesOrden = new ArrayList<>();
+            for (DetalleOrden detalle : carrito.getDetalles()) {
+                DetalleOrden detalleCopia = new DetalleOrden();
+                detalleCopia.setProducto(detalle.getProducto());
+                detalleCopia.setNombre(detalle.getNombre());
+                detalleCopia.setImgp(detalle.getImgp());
+                detalleCopia.setPrecio(detalle.getPrecio());
+                detalleCopia.setTotal(detalle.getTotal());
+                detalleCopia.setCantidad(detalle.getCantidad());
+                detalleCopia.setOrden(orden);
+                detallesOrden.add(detalleCopia);
+            }
+            orden.setDetalleOrdens(detallesOrden);
             ordenDao.save(orden);
 
             ordenRes.setNumeroOrden(numeroOrden);
@@ -108,8 +125,9 @@ public class OrdenServideImpl {
                 // Validar los detalles de pago
                 Map<String, Object> data = (Map<String, Object>) detallespago.get("data");
                 String respuesta = (String) data.get("x_response");
+                String invoice = (String) data.get("x_id_invoice");
                 if(data != null){
-                    String invoice = (String) data.get("x_id_invoice");
+
                     if ("Aceptada".equals(respuesta)) {
                         // Buscar la orden con el número de orden recibido
                         Orden orden = ordenDao.findByNumeroOrden(invoice)
@@ -121,21 +139,20 @@ public class OrdenServideImpl {
 
                         // Actualizar stock y limpiar carrito
                         OrdenRes confirmarCarrito = carritoServiceImpl.confirmarCarrito(userId);
-                        System.out.println(confirmarCarrito);
-
                         if (confirmarCarrito.getStatusCode() == 200) {
                             ordenRes = confirmarCarrito;
+                            ordenRes.setNumeroOrden(invoice);
                             ordenRes.setMessage("Pago confirmado y compra completada exitosamente");
                         } else {
                             ordenRes.setStatusCode(500);
                             ordenRes.setMessage("Error al cargar el carrito");
                         }
                     }else {
-                        eliminarOrdenPorNumero(invoice);
                         ordenRes.setStatusCode(400);
                         ordenRes.setMessage("El numero de orden no fue encontrado: " +  invoice);
                     }
                  } else {
+                    eliminarOrdenPorNumero(invoice);
                     ordenRes.setStatusCode(400);
                     ordenRes.setMessage("El pago no fue exitoso, estado: " + respuesta);
                 }
@@ -155,7 +172,6 @@ public class OrdenServideImpl {
             if (orden != null) {
                 // Actualizamos la orden en la base de datos
                 ordenDao.save(orden);
-                System.out.println("Orden actualizada con éxito");
             } else {
                 throw new RuntimeException("La orden no existe");
             }
@@ -179,6 +195,7 @@ public class OrdenServideImpl {
                     OrdenRes ordenRes = new OrdenRes();
                     ordenRes.setStatusCode(200);
                     ordenRes.setMessage("Órden encontrada.");
+                    ordenRes.setOid(orden.getOid());
                     ordenRes.setNumeroOrden(orden.getNumeroOrden());
                     ordenRes.setFechaCreacion(orden.getFechaCreacion());
                     // Agregar más detalles si es necesario.

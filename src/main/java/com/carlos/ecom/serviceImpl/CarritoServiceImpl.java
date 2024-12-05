@@ -251,7 +251,6 @@ public class CarritoServiceImpl {
             Optional<Carrito> carritoOpt = carritoDao.findByUserId(userId);
             if (carritoOpt.isPresent()) {
                 Carrito carrito = carritoOpt.get();
-
                 // Actualizar el stock de los productos
                 for (DetalleOrden detalles : carrito.getDetalles()) {
                     Producto producto = productoDao.findById(detalles.getProducto().getId())

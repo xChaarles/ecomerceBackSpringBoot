@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,5 +31,5 @@ public class Orden {
     private User user;
 
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleOrden> detalleOrdens;
+    private List<DetalleOrden> detalleOrdens = new ArrayList<>();
 }

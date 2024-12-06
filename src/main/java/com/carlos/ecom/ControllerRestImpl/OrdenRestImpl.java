@@ -47,4 +47,9 @@ public class OrdenRestImpl implements OrdenRest {
         return  ResponseEntity.ok(ordenServideImpl.getOrdenByUsers(userId));
     }
 
+    @Override
+    public ResponseEntity<OrdenRes> getAllOrden(){
+        return ResponseEntity.ok(ordenServideImpl.getAllOrden());
+    }
+
 }

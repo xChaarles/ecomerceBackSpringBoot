@@ -17,6 +17,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdenServideImpl {
@@ -42,7 +43,7 @@ public class OrdenServideImpl {
     private static final String EPAYCO_URL = "https://secure.epayco.co/validation/v1/reference/";
 
     // Método para generar un número de orden único
-    public String generarNumeroOrden() {
+    private String generarNumeroOrden() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String timestamp = LocalDateTime.now().format(formatter);
         String randomSuffix = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
@@ -62,6 +63,7 @@ public class OrdenServideImpl {
             orden.setFechaCreacion(LocalDateTime.now());
             orden.setUser(user);
             orden.setEstado("PENDIENTE");
+            orden.setTotal(0);
 
             Carrito carrito = carritoDao.findByUserId(userId)
                     .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
@@ -84,6 +86,7 @@ public class OrdenServideImpl {
             ordenRes.setNumeroOrden(numeroOrden);
             ordenRes.setFechaCreacion(orden.getFechaCreacion());
             ordenRes.setEstado(orden.getEstado());
+            ordenRes.setTotal(orden.getTotal());
             ordenRes.setStatusCode(200);
             ordenRes.setMessage("Orden creada exitosamente");
 
@@ -124,6 +127,8 @@ public class OrdenServideImpl {
             if (detallespago != null) {
                 // Validar los detalles de pago
                 Map<String, Object> data = (Map<String, Object>) detallespago.get("data");
+
+                Integer total = (Integer) data.get("x_amount");
                 String respuesta = (String) data.get("x_response");
                 String invoice = (String) data.get("x_id_invoice");
                 if(data != null){
@@ -135,6 +140,7 @@ public class OrdenServideImpl {
 
                         // Actualizar estado de la orden
                         orden.setEstado("COMPLETADA");
+                        orden.setTotal(total);
                         actualizarOrden(orden);
 
                         // Actualizar stock y limpiar carrito
@@ -214,5 +220,42 @@ public class OrdenServideImpl {
             ordenList.add(errorRes);
         }
         return ordenList;
+    }
+
+    public OrdenRes getAllOrden(){
+        OrdenRes ordenRes = new OrdenRes();
+        try{
+            List<Orden> result = ordenDao.findAll();
+            if (!result.isEmpty()){
+                List<OrdenRes> ordenResList = result.stream().map(orden -> {
+                    OrdenRes ordenResResult = new OrdenRes();
+                    ordenResResult.setOid(orden.getOid());
+                    ordenResResult.setNumeroOrden(orden.getNumeroOrden());
+                    ordenResResult.setFechaCreacion(orden.getFechaCreacion());
+                    ordenResResult.setEstado(orden.getEstado());
+                    ordenResResult.setTotal(orden.getTotal());
+
+                    UserRes userRes = new UserRes();
+                    userRes.setId(orden.getUser().getId());
+                    userRes.setNombre(orden.getUser().getNombre());
+                    userRes.setApellido(orden.getUser().getApellido());
+                    userRes.setEmail(orden.getUser().getEmail());
+                    ordenResResult.setUser(userRes);
+                    return ordenResResult;
+                }).collect(Collectors.toList());
+
+                ordenRes.setOrdenResList(ordenResList);
+                ordenRes.setStatusCode(200);
+                ordenRes.setMessage("Exitosa");
+            }else {
+                ordenRes.setStatusCode(404);
+                ordenRes.setMessage("No se encontraron ordenes");
+            }
+            return ordenRes;
+        }catch (Exception e){
+            ordenRes.setStatusCode(500);
+            ordenRes.setMessage("Ocurrio un error: "+ e.getMessage());
+            return ordenRes;
+        }
     }
 }

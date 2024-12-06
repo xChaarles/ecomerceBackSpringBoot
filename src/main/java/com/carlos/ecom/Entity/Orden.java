@@ -25,6 +25,7 @@ public class Orden {
     private String estado;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaRecibido;
+    private Integer total;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

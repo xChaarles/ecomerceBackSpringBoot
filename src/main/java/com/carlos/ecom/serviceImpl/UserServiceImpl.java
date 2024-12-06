@@ -3,6 +3,7 @@ package com.carlos.ecom.serviceImpl;
 import com.carlos.ecom.Entity.User;
 import com.carlos.ecom.Jwt.JwtUtils;
 import com.carlos.ecom.dao.UserDao;
+import com.carlos.ecom.dto.UserDto;
 import com.carlos.ecom.dto.UserRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -92,17 +95,31 @@ public class UserServiceImpl {
     public UserRes getAllUser (){
         UserRes userRes = new UserRes();
         try {
-            List<User> result = userDao.findAll();
-            if (!result.isEmpty()){
-                userRes.setUserList(result);
+            List<User> users = userDao.findAll();
+            if (!users.isEmpty()) {
+                // Mapea a UserDTO con solo los campos necesarios
+                List<UserDto> userDTOList = users.stream()
+                        .map(user -> new UserDto(
+                                user.getId(),
+                                user.getNombre(),
+                                user.getApellido(),
+                                user.getEmail(),
+                                user.getImg_url(), // Si la propiedad es "img_url" en User
+                                user.getCiudad(),
+                                user.getNumeroContacto(),
+                                user.getRole()
+                        ))
+                        .collect(Collectors.toList());
+
+                userRes.setUserResList(userDTOList); // Cambiamos a la lista mapeada
                 userRes.setStatusCode(200);
                 userRes.setMessage("Exitosa");
             } else {
                 userRes.setStatusCode(404);
-                userRes.setMessage("No se econtro ningun Producto");
+                userRes.setMessage("No se encontró ningún usuario");
             }
             return userRes;
-        }catch (Exception e){
+        }catch(Exception e){
             userRes.setStatusCode(500);
             userRes.setMessage("Ocurrio un ERROR:"+ e.getMessage());
             return userRes;

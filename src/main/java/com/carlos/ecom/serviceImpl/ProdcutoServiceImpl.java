@@ -55,9 +55,6 @@ public class ProdcutoServiceImpl {
         } catch (Exception e) {
             productoRes.setStatusCode(500);
             productoRes.setMessage("Ocurrió un ERROR: " + e.getMessage());
-            // Añadir log aquí para obtener más detalles
-            System.err.println("Error en getAllProducto: " + e.getMessage());
-            e.printStackTrace(); // Esto ayuda a depurar la excepción
             return productoRes;
         }
     }

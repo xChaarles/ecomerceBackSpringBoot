@@ -29,5 +29,6 @@ public class UserRes {
     private String role;
     private User user;
     private List<User> userList;
+    private List<UserDto> userResList;
 
 }

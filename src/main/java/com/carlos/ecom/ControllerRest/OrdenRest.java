@@ -21,4 +21,7 @@ public interface OrdenRest {
 
     @GetMapping("/user/ordenes/{userId}")
     public ResponseEntity<List<OrdenRes>> getOrdenByUsers(@PathVariable Integer userId);
+
+    @GetMapping("/admin/orden-all")
+    public ResponseEntity<OrdenRes> getAllOrden();
 }

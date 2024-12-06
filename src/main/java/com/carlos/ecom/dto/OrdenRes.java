@@ -16,10 +16,12 @@ public class OrdenRes {
     private String numeroOrden;
     private String estado;
     private LocalDateTime fechaCreacion;
+    private Integer total;
     private UserRes user;
     private DetalleOrdenRes detalleOrden;
     private List<DetalleOrdenRes> detalleOrdenList;
     private List<Orden> ordenList;
+    private List<OrdenRes> ordenResList;
 
 
 }

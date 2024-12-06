@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping
 public interface DetalleOrdenRest {
 
-    @GetMapping("/user/detalle-orden/{ordenId}")
+    @GetMapping("/adminuser/detalle-orden/{ordenId}")
     public ResponseEntity<DetalleOrdenRes> getDetallesPorOrden(@PathVariable Integer ordenId);
 
 }
